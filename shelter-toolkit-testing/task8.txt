@@ -1,0 +1,29 @@
+Task 8: Coverage check
+
+After running all tests with coverage, these branches are still not tested:
+
+1. AnimalCsvParser.parseFile: "if (header == null)" (a completely empty file).
+   Decision: YES, worth a test.
+   Reason: an empty file can really happen in an import. If someone removes this
+   check, the method would still return an empty result only by luck, so a test
+   protects the intended behaviour.
+
+2. AnimalSorter: the "animals == null" check in sortByName, sortByIntakeDate and
+   sortBySpeciesThenAgeDescending (only sortByAge has a null test).
+   Decision: YES, worth a test.
+   Reason: the guard is copy-pasted four times, so it is easy to break one copy.
+   Each test is one line.
+
+3. AnimalReportWriter: the "catch (IOException e)" blocks inside the lambdas.
+   Decision: NO.
+   Reason: hard to trigger (the writer would have to fail halfway through) and the
+   code only rethrows the exception. A test would be complicated and would not
+   catch a realistic bug.
+
+4. AnimalType: the whole class has 0% coverage.
+   Decision: NO for now.
+   Reason: nothing in the project uses it yet. Coverage cannot tell if code
+   matters; it should get tests when it starts being used.
+
+Conclusion: 100% coverage is not the goal. A branch deserves a test when it is a
+rule that someone could break by accident.
